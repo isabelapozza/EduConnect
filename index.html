@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduConnect — MVP</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">📚</span>
+      <strong>EduConnect</strong>
+    </div>
+    <nav class="user-nav">
+      <button id="botaoSincronizar" class="btn btn-ghost" hidden>Sincronizar</button>
+      <span id="usuarioAtual" class="muted"></span>
+      <button id="botaoSair" class="btn btn-ghost" hidden>Sair</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Autenticação -->
+    <section id="secaoAutenticacao" class="card">
+      <h1>Entrar</h1>
+      <p class="muted">Faça login rápido para acessar grupos e materiais.</p>
+      <form id="formularioLogin" class="form">
+        <div class="grid-2">
+          <label class="field">
+            <span>Nome</span>
+            <input type="text" id="entradaNome" placeholder="Seu nome" required />
+          </label>
+          <label class="field">
+            <span>E-mail</span>
+            <input type="email" id="entradaEmail" placeholder="voce@email.com" required />
+          </label>
+        </div>
+        <button class="btn btn-primary" type="submit">Entrar</button>
+      </form>
+    </section>
+
+    <!-- Aplicação -->
+    <section id="secaoAplicacao" hidden>
+      <!-- Abas -->
+      <div class="tabs" id="abas">
+        <button class="tab active" data-aba="grupos">Grupos</button>
+        <button class="tab" data-aba="criar">Criar Grupo</button>
+        <button class="tab" data-aba="materiais">Materiais</button>
+        <!-- ADIÇÃO: aba Mentorias -->
+        <button class="tab" data-aba="mentorias">Mentorias</button>
+      </div>
+
+      <!-- Vista: Lista de grupos -->
+      <div id="vista-grupos" class="view active">
+        <div class="card">
+          <div class="card-head">
+            <h2>Grupos disponíveis</h2>
+            <input id="buscaGrupos" class="input" placeholder="Buscar por nome..." />
+          </div>
+          <div id="listaGrupos" class="list"></div>
+        </div>
+
+        <div class="card">
+          <h3>Meus grupos</h3>
+          <div id="listaMeusGrupos" class="list"></div>
+        </div>
+      </div>
+
+      <!-- Vista: Criar grupo -->
+      <div id="vista-criar" class="view">
+        <div class="card">
+          <h2>Criar novo grupo</h2>
+          <form id="formularioCriarGrupo" class="form">
+            <label class="field">
+              <span>Nome do grupo</span>
+              <input id="nomeGrupo" required maxlength="60" placeholder="Ex.: Cálculo I - Noturno" />
+            </label>
+            <label class="field">
+              <span>Descrição</span>
+              <textarea id="descricaoGrupo" rows="3" placeholder="Breve descrição do grupo..."></textarea>
+            </label>
+            <button class="btn btn-primary" type="submit">Criar</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Vista: Materiais -->
+      <div id="vista-materiais" class="view">
+        <div class="card">
+          <h2>Materiais do grupo</h2>
+
+          <label class="field">
+            <span>Selecione um grupo</span>
+            <select id="selecaoGrupoMateriais"></select>
+          </label>
+
+          <div id="caixaMateriais" hidden>
+            <div class="card-sub">
+              <h3>Adicionar material</h3>
+              <form id="formularioAdicionarMaterial" class="form-inline">
+                <input id="tituloMaterial" class="input" placeholder="Título do material" required />
+                <input id="urlMaterial" class="input" placeholder="URL (https://...)" required />
+                <button class="btn btn-primary" type="submit">Adicionar</button>
+              </form>
+            </div>
+
+            <div class="card-sub">
+              <h3>Lista</h3>
+              <div id="listaMateriais" class="list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADIÇÃO: Vista Mentorias -->
+      <div id="vista-mentorias" class="view">
+        <div class="card">
+          <h2>Agendar mentoria</h2>
+
+          <form id="formularioAgendarMentoria" class="form">
+            <div class="grid-2">
+              <label class="field">
+                <span>Título</span>
+                <input id="tituloMentoria" placeholder="Ex.: Dúvidas de Cálculo I" required />
+              </label>
+              <label class="field">
+                <span>Tópico</span>
+                <input id="topicoMentoria" placeholder="Resumo do assunto" required />
+              </label>
+            </div>
+
+            <div class="grid-2">
+              <label class="field">
+                <span>Grupo (opcional)</span>
+                <select id="selecaoGrupoMentoria"></select>
+              </label>
+              <label class="field">
+                <span>Data e hora</span>
+                <input id="dataHoraMentoria" type="datetime-local" required />
+              </label>
+            </div>
+
+            <div class="grid-2">
+              <label class="field">
+                <span>Nome do mentor(a)</span>
+                <input id="mentorNome" placeholder="Ex.: Profa. Maria" required />
+              </label>
+              <label class="field">
+                <span>E-mail do mentor(a)</span>
+                <input id="mentorEmail" type="email" placeholder="mentor@exemplo.com" required />
+              </label>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Agendar</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>Minhas mentorias</h2>
+            <select id="filtroStatusMentoria" class="input">
+              <option value="TODAS">Todas</option>
+              <option value="PENDENTE">Pendentes</option>
+              <option value="CONFIRMADA">Confirmadas</option>
+              <option value="CONCLUIDA">Concluídas</option>
+            </select>
+          </div>
+          <div id="listaMentorias" class="list"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="aviso" class="toast" hidden></div>
+
+  <footer class="footer">
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
